@@ -57,6 +57,7 @@ loadData <- function() {
 
 resetForm <- function(session) {
   # reset values
+  updateSelectInput(session,"Name", selected=character(0))
   updateSelectInput(session, "Beer", selected=character(0))
   updateNumericInput(session, "flavor", value = 1)
   updateNumericInput(session, "aroma", value = 1)
@@ -72,6 +73,10 @@ ui <- fluidPage(
     
     # Sidebar panel for inputs ----
     sidebarPanel(
+      selectInput("Name",
+                  "Your Name",
+                  c(" ","Crystal", "Josh", "Jacob", "Rena","Lacy", "Dre")
+      ),
       selectInput("Beer",
                   "Name of Beer", 
                   c(" ","City Wide","High Life", "Ginger Wheat"
