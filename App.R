@@ -5,7 +5,7 @@ library(tidyverse)
 outputDir <- "responses"
 
 # Define the fields we want to save from the form
-fields <- c("Name","Beer", "flavor", "aroma", "appearance","mouthfeel","drinkability")
+fields <- c("Name","Beer", "flavor", "aroma", "appearance","drinkability")
 
 saveData <- function(input) {
   # put variables in a data frame
@@ -59,11 +59,10 @@ resetForm <- function(session) {
   # reset values
   updateSelectInput(session,"Name", selected=character(0))
   updateSelectInput(session, "Beer", selected=character(0))
-  updateNumericInput(session, "flavor", value = 1)
-  updateNumericInput(session, "aroma", value = 1)
-  updateNumericInput(session, "appearance", value = 1)
-  updateNumericInput(session, "mouthfeel", value = 1)
-  updateNumericInput(session, "drinkability", value = 1)
+  updateSliderInput(session, "flavor", value = 1)
+  updateSliderInput(session, "aroma", value = 1)
+  updateSliderInput(session, "appearance", value = 1)
+  updateSliderInput(session, "drinkability", value = 1)
 }
 
 ui <- fluidPage(
@@ -86,15 +85,15 @@ ui <- fluidPage(
                     "2nd Shift Katy Brett Saison", "Logboat Shiphead"
                   )
       ),
-      numericInput("flavor", "Flavor Rating",  min = 1, max = 5, step = 1, value = 1),
-      numericInput("aroma", "Aroma Rating",
+      sliderInput("flavor", "Flavor Rating",  min = 1, max = 5, step = 1, value = 1),
+      sliderInput("aroma", "Aroma Rating",
                    min = 1, max = 5, step = 1, value = 1),
-      numericInput("appearance", "Appearance Rating",
+      sliderInput("appearance", "Appearance Rating",
                    min = 1, max = 5, step = 1, value = 1),
-      numericInput("mouthfeel", "Mouthfeel Rating",
-                   min = 1, max = 5, step = 1, value = 1),
-      numericInput("drinkability", "Drinkability Rating",
-                   min = 1, max = 5, step = 1, value = 1),
+      sliderInput(
+        "drinkability", "Drinkability Rating",
+        min = 1, max = 5, step = 1, value = 1
+      ),
       actionButton("submit", "Submit"),
       actionButton("clear", "Clear Form"),
       downloadButton("downloadData", "Download")
