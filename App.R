@@ -149,9 +149,11 @@ server = function(input, output, session) {
       group_by(Beer) %>%
       summarize(AvgScore = mean(Score), SD=sd(Score))%>%
       ggplot(aes(x=reorder(Beer, -AvgScore), y=AvgScore)) +
-      geom_bar(stat="identity", fill = "goldenrod2")+geom_text(aes(label=round(AvgScore,2)))+
+      geom_bar(stat="identity", fill = "goldenrod2", color="black")+geom_text(aes(label=round(AvgScore,2)),
+                                                      position = position_nudge(y = -8))+
       xlab("Beer")+geom_errorbar(aes(ymin=AvgScore-SD, ymax=AvgScore+SD), width=.2,
-                                 position=position_dodge(.9))
+                                 position=position_dodge(.9))+
+      theme(axis.text=element_text(face="bold"))+theme_classic() 
     
   })
 }
