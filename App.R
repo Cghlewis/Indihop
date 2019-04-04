@@ -83,7 +83,7 @@ ui <- fluidPage(
       selectInput("Beer",
                   "Name of Beer", 
                   c(" ","4 Hands City Wide Pale Ale","Civil Life Scotch Ale",
-                    "2nd Shift Katy Brett Saison"
+                    "2nd Shift Katy Brett Saison", "Logboat Shiphead"
                   )
       ),
       numericInput("flavor", "Flavor Rating",  min = 1, max = 5, step = 1, value = 1),
@@ -148,6 +148,8 @@ server = function(input, output, session) {
       mutate(Score = rowSums(select(., flavor:drinkability))) %>%
       group_by(Beer) %>%
       summarize(AvgScore = mean(Score), SD=sd(Score))%>%
+      arrange(desc(AvgScore)) %>%
+      slice(1:3) %>%
       ggplot(aes(x=reorder(Beer, -AvgScore), y=AvgScore)) +
       geom_bar(stat="identity", fill = "goldenrod2", color="black")+geom_text(aes(label=round(AvgScore,2)),
                                                       position = position_nudge(y = -8))+
