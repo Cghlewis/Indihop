@@ -127,7 +127,8 @@ server = function(input, output, session) {
     input$submit
     
     loadData()
-  })
+  }, options=list(pageLength=5, lengthMenu = c(5, 10, 15, 20, 30, 50)))
+                  
   
   # Downloadable csv of selected dataset ----
   output$downloadData <- downloadHandler(
