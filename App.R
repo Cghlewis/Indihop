@@ -5,7 +5,7 @@ library(tidyverse)
 outputDir <- "responses"
 
 # Define the fields we want to save from the form
-fields <- c("Name","Beer", "flavor", "aroma")
+fields <- c("Name","Beer", "flavor", "aroma", "appearance","mouthfeel","drinkability")
 
 saveData <- function(input) {
   # put variables in a data frame
@@ -61,6 +61,9 @@ resetForm <- function(session) {
   updateSelectInput(session, "Beer", selected=character(0))
   updateNumericInput(session, "flavor", value = 1)
   updateNumericInput(session, "aroma", value = 1)
+  updateNumericInput(session, "appearance", value = 1)
+  updateNumericInput(session, "mouthfeel", value = 1)
+  updateNumericInput(session, "drinkability", value = 1)
 }
 
 ui <- fluidPage(
@@ -79,11 +82,18 @@ ui <- fluidPage(
       ),
       selectInput("Beer",
                   "Name of Beer", 
-                  c(" ","City Wide","High Life", "Ginger Wheat"
+                  c(" ","4 Hands City Wide Pale Ale","Civil Life Scotch Ale",
+                    "2nd Shift Katy Brett Saison"
                   )
       ),
       numericInput("flavor", "Flavor Rating",  min = 1, max = 5, step = 1, value = 1),
       numericInput("aroma", "Aroma Rating",
+                   min = 1, max = 5, step = 1, value = 1),
+      numericInput("appearance", "Appearance Rating",
+                   min = 1, max = 5, step = 1, value = 1),
+      numericInput("mouthfeel", "Mouthfeel Rating",
+                   min = 1, max = 5, step = 1, value = 1),
+      numericInput("drinkability", "Drinkability Rating",
                    min = 1, max = 5, step = 1, value = 1),
       actionButton("submit", "Submit"),
       actionButton("clear", "Clear Form"),
@@ -135,12 +145,13 @@ server = function(input, output, session) {
     data <- loadData()
     
     data%>%
-      mutate(Score = rowSums(select(., flavor:aroma))) %>%
+      mutate(Score = rowSums(select(., flavor:drinkability))) %>%
       group_by(Beer) %>%
-      summarize(AvgScore = mean(Score))%>%
+      summarize(AvgScore = mean(Score), SD=sd(Score))%>%
       ggplot(aes(x=reorder(Beer, -AvgScore), y=AvgScore)) +
       geom_bar(stat="identity", fill = "goldenrod2")+geom_text(aes(label=round(AvgScore,2)))+
-      xlab("Beer")
+      xlab("Beer")+geom_errorbar(aes(ymin=AvgScore-SD, ymax=AvgScore+SD), width=.2,
+                                 position=position_dodge(.9))
     
   })
 }
