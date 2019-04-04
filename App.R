@@ -82,7 +82,7 @@ ui <- fluidPage(
       ),
       selectInput("Beer",
                   "Name of Beer", 
-                  c(" ","4 Hands City Wide Pale Ale","Civil Life Scotch Ale",
+                  c(" ","4 Hands City Wide Pale Ale","Civil Life Scottish Ale",
                     "2nd Shift Katy Brett Saison", "Logboat Shiphead"
                   )
       ),
@@ -147,15 +147,11 @@ server = function(input, output, session) {
     data%>%
       mutate(Score = rowSums(select(., flavor:drinkability))) %>%
       group_by(Beer) %>%
-      summarize(AvgScore = mean(Score), SD=sd(Score))%>%
-      arrange(desc(AvgScore)) %>%
+      arrange(desc(Score)) %>%
       slice(1:3) %>%
-      ggplot(aes(x=reorder(Beer, -AvgScore), y=AvgScore)) +
-      geom_bar(stat="identity", fill = "goldenrod2", color="black")+geom_text(aes(label=round(AvgScore,2)),
-                                                      position = position_nudge(y = -8))+
-      xlab("Beer")+geom_errorbar(aes(ymin=AvgScore-SD, ymax=AvgScore+SD), width=.2,
-                                 position=position_dodge(.9))+
-      theme(axis.text=element_text(face="bold"))+theme_classic() 
+      ggplot(aes(x=reorder(Beer, -Score), y=Score)) +
+      geom_boxplot(fill = "goldenrod2", color="black")+
+      xlab("Beer")
     
   })
 }
