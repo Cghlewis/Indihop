@@ -147,11 +147,15 @@ server = function(input, output, session) {
     data%>%
       mutate(Score = rowSums(select(., flavor:drinkability))) %>%
       group_by(Beer) %>%
-      arrange(desc(Score)) %>%
+      summarize(AvgScore = mean(Score), SD=sd(Score))%>%
+      arrange(desc(AvgScore)) %>%
       slice(1:3) %>%
-      ggplot(aes(x=reorder(Beer, -Score), y=Score)) +
-      geom_boxplot(fill = "goldenrod2", color="black")+
-      xlab("Beer")
+      ggplot(aes(x=reorder(Beer, -AvgScore), y=AvgScore)) +
+      geom_bar(stat="identity", fill = "goldenrod2", color="black")+geom_text(aes(label=round(AvgScore,1)),
+                                                                              position = position_nudge(y = -8))+
+      xlab("Beer")+geom_errorbar(aes(ymin=AvgScore-SD, ymax=AvgScore+SD), width=.2,
+                                 position=position_dodge(.9))+
+      theme(axis.text=element_text(face="bold"))+theme_classic() 
     
   })
 }
