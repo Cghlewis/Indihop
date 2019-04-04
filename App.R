@@ -123,9 +123,8 @@ server = function(input, output, session) {
   
   # Show the previous responses in a reactive table ----
   output$responses <- renderDataTable({
-    # update with current response when Submit or Delete are clicked
-    input$submit 
-    
+    # update with current response when Submit is clicked
+    input$submit
     
     loadData()
   })
@@ -144,7 +143,8 @@ server = function(input, output, session) {
     data <- loadData()
     
     data%>%
-      mutate(Score = rowSums(select(., flavor:drinkability))) %>%
+      rowwise%>%
+      mutate(Score = (flavor*.3)+(aroma*.2)+(appearance*.1)+(drinkability*.4)) %>%
       group_by(Beer) %>%
       summarize(AvgScore = mean(Score), SD=sd(Score))%>%
       arrange(desc(AvgScore)) %>%
@@ -154,7 +154,7 @@ server = function(input, output, session) {
                                                                               position = position_nudge(y = -8))+
       xlab("Beer")+geom_errorbar(aes(ymin=AvgScore-SD, ymax=AvgScore+SD), width=.2,
                                  position=position_dodge(.9))+
-      theme(axis.text=element_text(face="bold"))+theme_classic() 
+      theme(axis.text=element_text(face="bold"))+theme_classic()+ylim(0,6.5)
     
   })
 }
