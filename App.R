@@ -77,7 +77,7 @@ ui <- fluidPage(
     sidebarPanel(
       selectInput("Name",
                   "Your Name",
-                  c(" ","Crystal", "Josh", "Jacob", "Rena","Lacy", "Dre")
+                  c(" ","Test","Crystal", "Josh", "Jacob", "Rena","Lacy", "Dre")
       ),
       selectInput("Beer",
                   "Name of Beer", 
