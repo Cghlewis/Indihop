@@ -153,7 +153,7 @@ server = function(input, output, session) {
       ggplot(aes(x=reorder(Beer, -AvgScore), y=AvgScore)) +
       geom_bar(stat="identity", fill = "goldenrod2", color="black")+geom_text(aes(label=round(AvgScore,1)),
                                                                               position = position_nudge(y = -8))+
-      xlab("Beer")+geom_errorbar(aes(ymin=AvgScore-SD, ymax=AvgScore+SD), width=.2,
+      xlab("Beer")+ylab("Average Weighted Score")+geom_errorbar(aes(ymin=AvgScore-SD, ymax=AvgScore+SD), width=.2,
                                  position=position_dodge(.9))+
       theme(axis.text=element_text(face="bold"))+theme_classic()+ylim(0,6.5)
     
