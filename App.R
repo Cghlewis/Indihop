@@ -68,7 +68,7 @@ resetForm <- function(session) {
 ui <- fluidPage(
   
   # App title ----
-  titlePanel("IndiHop Beer Ratings"),
+  titlePanel("IndiHop 2019 Beer Ratings"),
   
   # Sidebar layout with input and output definitions ----
   sidebarLayout(
