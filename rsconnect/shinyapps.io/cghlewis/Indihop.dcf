@@ -1,0 +1,13 @@
+name: Indihop
+title: Indihop
+username:
+account: cghlewis
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 900656
+bundleId: 2050727
+url: https://cghlewis.shinyapps.io/Indihop/
+when: 1556653129.23131
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: Image.jpg|image2.png
