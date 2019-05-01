@@ -2,11 +2,14 @@ library(shiny)
 library(ggplot2)
 library(tidyverse)
 
+#load responses into a response folder
+
 outputDir <- "responses"
 
 # Define the fields we want to save from the form
 fields <- c("Name","Beer", "flavor", "aroma", "appearance","drinkability")
 
+#save data
 saveData <- function(input) {
   # put variables in a data frame
   data <- data.frame(matrix(nrow=1,ncol=0))
@@ -36,6 +39,7 @@ saveData <- function(input) {
   )
 }
 
+#load data
 loadData <- function() {
   # read all the files into a list
   files <- list.files(outputDir, full.names = TRUE)
@@ -55,6 +59,7 @@ loadData <- function() {
   data
 }
 
+#reset form after submission
 resetForm <- function(session) {
   # reset values
   updateSelectInput(session,"Name", selected=character(0))
@@ -65,6 +70,8 @@ resetForm <- function(session) {
   updateSliderInput(session, "drinkability", value = 1)
 }
 
+
+#ui
 ui <- fluidPage(
   
   # App title ----
@@ -85,13 +92,13 @@ ui <- fluidPage(
                     "2nd Shift Katy Brett Saison", "Logboat Shiphead"
                   )
       ),
-      sliderInput("flavor", "Flavor Rating",  min = 1, max = 5, step = 1, value = 1),
-      sliderInput("aroma", "Aroma Rating",
+      sliderInput("flavor", "Flavor Rating (Weight 30%)",  min = 1, max = 5, step = 1, value = 1),
+      sliderInput("aroma", "Aroma Rating (Weight 20%)",
                    min = 1, max = 5, step = 1, value = 1),
-      sliderInput("appearance", "Appearance Rating",
+      sliderInput("appearance", "Appearance Rating (Weight 10%)",
                    min = 1, max = 5, step = 1, value = 1),
       sliderInput(
-        "drinkability", "Drinkability Rating",
+        "drinkability", "Drinkability Rating (Weight 40%)",
         min = 1, max = 5, step = 1, value = 1
       ),
       actionButton("submit", "Submit"),
@@ -108,6 +115,7 @@ ui <- fluidPage(
   )
 )
 
+#server
 server = function(input, output, session) {
   
   # When the Submit button is clicked, save the form data
@@ -137,7 +145,10 @@ server = function(input, output, session) {
       write.csv(loadData(), file, row.names = FALSE, quote= TRUE)
     }
   )
-  
+ 
+  #make plot of output
+  #bar chart of weighted score per person averaged across each beer and then only the top 3 displayed 
+  #SD for each beer is also displayed (error bars)
   output$flavorPlot <- renderPlot({
     input$submit
     
@@ -153,7 +164,7 @@ server = function(input, output, session) {
       ggplot(aes(x=reorder(Beer, -AvgScore), y=AvgScore)) +
       geom_bar(stat="identity", fill = "goldenrod2", color="black")+geom_text(aes(label=round(AvgScore,1)),
                                                                               position = position_nudge(y = -8))+
-      xlab("Beer")+ylab("Average Weighted Score")+geom_errorbar(aes(ymin=AvgScore-SD, ymax=AvgScore+SD), width=.2,
+      xlab("Top 3 Beers")+ylab("Average Weighted Score")+geom_errorbar(aes(ymin=AvgScore-SD, ymax=AvgScore+SD), width=.2,
                                  position=position_dodge(.9))+
       theme(axis.text=element_text(face="bold"))+theme_classic()+ylim(0,6.5)
     
