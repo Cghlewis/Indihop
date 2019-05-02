@@ -5,9 +5,9 @@ account: cghlewis
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 900656
-bundleId: 2052501
+bundleId: 2053113
 url: https://cghlewis.shinyapps.io/Indihop/
-when: 1556715158.05572
+when: 1556727845.74447
 asMultiple: FALSE
 asStatic: FALSE
 ignoredFiles: Image.jpg|image2.png
