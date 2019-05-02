@@ -1,6 +1,7 @@
 library(shiny)
 library(ggplot2)
 library(tidyverse)
+library(DT)
 
 #load responses into a response folder
 
@@ -116,6 +117,7 @@ ui <- fluidPage(
 )
 
 #server
+
 server = function(input, output, session) {
   
   # When the Submit button is clicked, save the form data
@@ -136,6 +138,7 @@ server = function(input, output, session) {
     
     loadData()
   }, options=list(pageLength=5, lengthMenu = c(5, 10, 15, 20, 30, 50)))
+                  
                   
   
   # Downloadable csv of selected dataset ----
